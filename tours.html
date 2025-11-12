@@ -3,13 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RockBand | О группе</title>
+    <title>Световой год | Туры</title>
     <link rel="stylesheet" href="main.css">
     <script src="main.js" defer></script>
 </head>
 <body>
     <header>
-        <img src="assets/logo.png" alt="Logo" class="logo">
+        <img src="assets/logo.png" alt="Световой год Logo" class="logo">
+        <nav class="nav">
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="about.html">О группе</a></li>
+                <li><a href="tours.html">Туры</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+                <li><a href="gallery.html">Галерея</a></li>
+            </ul>
+            <div class="burger">☰</div>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Ближайшие концерты</h1>
+        
+        <div class="tours-container">
+            <div class="tour-card">
+                <div class="tour-date">
+                    <span class="day">15</span>
+                    <span class="month">МАР</span>
+                    <span class="year">2026</span>
+                </div>
+                <div class="tour-info">
+                    <h3>Москва</h3>
+                    <p class="venue">Клуб "Космос"</p>
+                    <p class="time">Начало: 20:00</p>
+                    <p class="price">от 1500 ₽</p>
+                </div>
+                <button class="open-modal btn tour-btn">Купить билет</button>
+            </div>
+
+            <div class="tour-card">
+                <div class="tour-date">
+                    <span class="day">22</span>
+                    <span class="month">МАР</span>
+                    <span class="year">2026</span>
+                </div>
+                <div class="tour-info">
+                    <h3>Санкт-Петербург</h3>
+                    <p class="venue">Клуб "Орбита"</p>
+                    <p class="time">Начало: 19:30</p>
+                    <p class="price">от 1800 ₽</p>
+                </div>
+                <button class="open-modal btn tour-btn">Купить билет</button>
+            </div>
+
+            <div class="tour-card">
+                <div class="tour-date">
+                    <span class="day">05</span>
+                    <span class="month">АПР</span>
+                    <span class="year">2026</span>
+                </div>
+                <div class="tour-info">
+                    <h3>Екатеринбург</h3>
+                    <p class="venue">Дворец молодежи</p>
+                    <p class="time">Начало: 20:00</p>
+                    <p class="price">от 1200 ₽</p>
+                </div>
+                <button class="open-modal btn tour-btn">Купить билет</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <img src="assets/logo.png" alt="Световой год Logo" class="logo">
         <nav class="nav">
             <ul>
                 <li><a href="index.html">Главная</a></li>
@@ -18,32 +83,10 @@
                 <li><a href="tickets.html">Билеты</a></li>
                 <li><a href="gallery.html">Галерея</a></li>
             </ul>
-            <div class="burger">☰</div>
         </nav>
-    </header>
-
-    <main>
-        <h1>Ближайшие туры</h1>
-        <ul>
-            <li>15.12.2025 — Москва   <button class="open-modal btn">Купить</button></li>
-            <li>20.12.2025 — Питер    <button class="open-modal btn">Купить</button></li>
-        </ul>
-    </main>
-
-    <footer>
-        <img src="assets/logo.png" alt="Logo" class="logo">
-        <nav class="nav">
-            <ul>
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="about.html">О группе</a></li>
-                <li><a href="tours.html">Туры</a></li>
-                <li><a href="tickets.html">Билеты</a></li>
-                <li><a href="gallery.html">Галерея</a></li>
-              </ul>
-              
-        </nav>
-        <p>© RockBand 2025</p>
+        <p>© Световой год 2025</p>
     </footer>
+    
     <div class="modal" id="modal">
         <div class="modal-content">
             <span class="close">×</span>

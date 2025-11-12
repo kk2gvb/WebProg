@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Световой год | Контакты</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="main.js" defer></script>
+</head>
+<body>
+    <header>
+        <img src="assets/logo.png" alt="Световой год Logo" class="logo">
+        <nav class="nav">
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="about.html">О группе</a></li>
+                <li><a href="tours.html">Туры</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+                <li><a href="gallery.html">Галерея</a></li>
+            </ul>
+            <div class="burger">☰</div>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Контакты</h1>
+        
+        <div class="contacts-container">
+            <div class="contact-section">
+                <h2>Менеджмент</h2>
+                <div class="contact-card">
+                    <h3>Анна Звездина</h3>
+                    <p>Директор группы</p>
+                    <p>📧 manager@lightyear-band.ru</p>
+                    <p>📱 +7 (495) 123-45-67</p>
+                </div>
+            </div>
+
+            <div class="contact-section">
+                <h2>Букинг концертов</h2>
+                <div class="contact-card">
+                    <h3>Максим Орбитов</h3>
+                    <p>Организация выступлений</p>
+                    <p>📧 booking@lightyear-band.ru</p>
+                    <p>📱 +7 (495) 987-65-43</p>
+                </div>
+            </div>
+
+            <div class="contact-section">
+                <h2>Пресс-служба</h2>
+                <div class="contact-card">
+                    <h3>Елена Космосова</h3>
+                    <p>Связи с прессой</p>
+                    <p>📧 press@lightyear-band.ru</p>
+                    <p>📱 +7 (495) 555-77-99</p>
+                </div>
+            </div>
+
+            <div class="contact-section">
+                <h2>Социальные сети</h2>
+                <div class="social-links">
+                    <a href="https://vk.com/kk2gvb" class="social-link">🎵 VK</a>
+                    <a href="https://music.yandex.ru/artist/165162?utm_source=desktop&utm_medium=copy_link" class="social-link">🎧 ЯМузыка</a>
+                </div>
+            </div>
+        </div>
+        
+        <button class="open-modal btn">Написать нам</button>
+    </main>
+
+    <footer>
+        <img src="assets/logo.png" alt="Световой год Logo" class="logo">
+        <nav class="nav">
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="about.html">О группе</a></li>
+                <li><a href="tours.html">Туры</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+                <li><a href="gallery.html">Галерея</a></li>
+            </ul>
+        </nav>
+        <p>© Световой год 2025</p>
+    </footer>
+    
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close">×</span>
+            <h2>Связаться с нами</h2>
+            <form>
+                <input type="text" placeholder="Имя" required>
+                <input type="email" placeholder="Email" required>
+                <input type="tel" placeholder="Телефон" required>
+                <textarea placeholder="Сообщение" rows="4" required></textarea>
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
+    </div>
+
+    <button class="to-top">↑</button>
+</body>
+</html>

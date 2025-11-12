@@ -57,11 +57,53 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. БУРГЕР-МЕНЮ
     const burger = document.querySelector('.burger');
     const navUl = document.querySelector('.nav ul');
+    let navOverlay;
+
     if (burger) {
+        // Создаем overlay
+        navOverlay = document.createElement('div');
+        navOverlay.className = 'nav-overlay';
+        document.body.appendChild(navOverlay);
+        
+        // Открытие/закрытие меню
         burger.onclick = () => {
-            navUl.classList.toggle('active');
-            burger.textContent = navUl.classList.contains('active') ? '×' : '☰';
+            const isActive = navUl.classList.contains('active');
+            
+            if (isActive) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
         };
+        
+        // Закрытие по клику на overlay
+        navOverlay.onclick = closeMenu;
+        
+        // Закрытие по клику на ссылку
+        navUl.querySelectorAll('a').forEach(link => {
+            link.onclick = closeMenu;
+        });
+        
+        // Закрытие по ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navUl.classList.contains('active')) {
+                closeMenu();
+            }
+        });
+        
+        function openMenu() {
+            navUl.classList.add('active');
+            navOverlay.classList.add('active');
+            burger.textContent = '×';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeMenu() {
+            navUl.classList.remove('active');
+            navOverlay.classList.remove('active');
+            burger.textContent = '☰';
+            document.body.style.overflow = '';
+        }
     }
 
     // 4. ГАЛЕРЕЯ + ЛАЙТБОКС (на gallery.html)

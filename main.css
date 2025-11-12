@@ -23,9 +23,42 @@ h1, h2 { color: #f00; font-family: 'Bangers', cursive; } /* Добавь Google 
 .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); overflow: auto; }
 .modal-content { background: #222; margin: 10% auto; padding: 2rem; width: 90%; max-width: 400px; border: 3px solid #f00; position: relative; }
 .close { position: absolute; top: 10px; right: 20px; font-size: 2rem; cursor: pointer; color: #fff; }
+.modal textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    background: #333;
+    border: 2px solid #f00;
+    color: #fff;
+    border-radius: 5px;
+    resize: vertical;
+}
 
 /* Бургер */
-.burger { display: none; font-size: 2rem; cursor: pointer; color: #f00; }
+.burger {
+    display: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #f00;
+    transition: transform 0.3s;
+    z-index: 1001;
+    position: relative;
+}
+
+.burger:hover {
+    transform: scale(1.1);
+}
+
+.nav-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+}
 
 /* Галерея */
 .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
@@ -45,8 +78,247 @@ h1, h2 { color: #f00; font-family: 'Bangers', cursive; } /* Добавь Google 
 
 /* Мобилька */
 @media (max-width: 768px) {
-    .nav ul { display: none; flex-direction: column; background: #000; position: absolute; top: 70px; left: 0; width: 100%; padding: 1rem 0; }
-    .nav ul.active { display: flex; }
-    .burger { display: block; }
-    .slider img { height: 200px; object-fit: cover; }
+    .nav ul {
+        display: none;
+        flex-direction: column;
+        background: linear-gradient(135deg, #000, #222);
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 300px;
+        height: 100vh;
+        padding: 4rem 0 2rem 0;
+        z-index: 1000;
+        transition: right 0.4s ease;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+        border-left: 3px solid #f00;
+    }
+    
+    .nav ul.active {
+        display: flex;
+        right: 0;
+    }
+    
+    .nav ul li {
+        margin: 0;
+        padding: 0;
+        border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+    }
+    
+    .nav ul li a {
+        display: block;
+        padding: 1.2rem 2rem;
+        font-size: 1.3rem;
+        color: #fff;
+        transition: all 0.3s;
+        border-left: 4px solid transparent;
+    }
+    
+    .nav ul li a:hover {
+        background: rgba(255, 0, 0, 0.1);
+        border-left-color: #f00;
+        color: #f00;
+        text-decoration: none;
+        transform: translateX(10px);
+    }
+    
+    .burger {
+        display: block;
+    }
+    
+    .slider img {
+        height: 200px;
+        object-fit: cover;
+    }
+}
+
+/* Дополнительные стили для страницы О группе */
+.band-info {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: left;
+    padding: 2rem;
+}
+
+.band-info p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.band-members {
+    list-style: none;
+    padding: 1rem 0;
+}
+
+.band-members li {
+    margin-bottom: 0.8rem;
+    padding: 0.5rem;
+    background: rgba(255, 0, 0, 0.1);
+    border-left: 3px solid #f00;
+}
+
+.philosophy {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #f00;
+    font-weight: bold;
+    margin-top: 2rem;
+}
+
+/* Стили для страницы туров */
+.tours-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.tour-card {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 0, 0, 0.1);
+    border: 2px solid #f00;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 10px;
+    transition: transform 0.3s;
+}
+
+.tour-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(255, 0, 0, 0.3);
+}
+
+.tour-date {
+    text-align: center;
+    margin-right: 2rem;
+    min-width: 80px;
+}
+
+.tour-date .day {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #f00;
+}
+
+.tour-date .month {
+    display: block;
+    font-size: 1rem;
+    color: #fff;
+}
+
+.tour-date .year {
+    display: block;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.tour-info {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.tour-info h3 {
+    color: #f00;
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+}
+
+.tour-info p {
+    margin: 0.3rem 0;
+    color: #ccc;
+}
+
+.venue {
+    font-weight: bold;
+    color: #fff !important;
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #f00 !important;
+}
+
+/*Карточки туров*/
+.tour-btn {
+    margin-left: 1rem;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .tour-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .tour-date {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .tour-btn {
+        margin-left: 0;
+        margin-top: 1rem;
+    }
+}
+
+.contacts-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.contact-section h2 {
+    color: #f00;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.contact-card {
+    background: rgba(255, 0, 0, 0.1);
+    border: 2px solid #f00;
+    padding: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.contact-card h3 {
+    color: #f00;
+    margin-bottom: 0.5rem;
+}
+
+.contact-card p {
+    margin: 0.5rem 0;
+    color: #ccc;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.social-link {
+    display: block;
+    padding: 1rem;
+    background: rgba(255, 0, 0, 0.1);
+    border: 2px solid #f00;
+    border-radius: 10px;
+    color: #f00;
+    text-decoration: none;
+    transition: all 0.3s;
+    min-width: 100px;
+    text-align: center;
+}
+
+.social-link:hover {
+    background: #f00;
+    color: #fff;
+    transform: translateY(-3px);
 }
