@@ -501,6 +501,14 @@ function LiveTourCards() {
           
           React.createElement('button', {
             className: 'open-modal btn',
+            onClick: () => {
+              const modal = document.getElementById('modal');
+              if (modal) {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                document.querySelector('main').style.filter = 'blur(5px)';
+              }
+            },
             style: {
               background: '#f00',
               color: 'white',
@@ -518,8 +526,7 @@ function LiveTourCards() {
             onMouseLeave: (e) => {
               e.target.style.background = '#f00';
               e.target.style.transform = 'scale(1)';
-            },
-// onClick убран - используется делегирование событий из main.js
+            }
           }, '🎫 Купить')
         )
       );
