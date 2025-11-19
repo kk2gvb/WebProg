@@ -355,7 +355,147 @@ function SmartContactForm() {
   );
 }
 
-// 3. Живые карточки туров
+// 3. Информационные карточки туров (без кнопок)
+function InfoTourCards() {
+  const [tours] = useState([
+    {
+      id: 1,
+      date: '15 МАР 2026',
+      city: 'Москва',
+      venue: 'Клуб "Космос"',
+      time: '20:00',
+      price: 1500,
+      tickets: 45,
+      maxTickets: 200
+    },
+    {
+      id: 2,
+      date: '22 МАР 2026',
+      city: 'Санкт-Петербург',
+      venue: 'Клуб "Орбита"',
+      time: '19:30',
+      price: 1800,
+      tickets: 12,
+      maxTickets: 150
+    },
+    {
+      id: 3,
+      date: '05 АПР 2026',
+      city: 'Екатеринбург',
+      venue: 'Дворец молодежи',
+      time: '20:00',
+      price: 1200,
+      tickets: 89,
+      maxTickets: 300
+    }
+  ]);
+
+  const getTicketStatus = (tickets, maxTickets) => {
+    const percentage = (tickets / maxTickets) * 100;
+    if (percentage < 20) return { text: 'Мало билетов!', color: '#f00' };
+    if (percentage < 50) return { text: 'Популярно', color: '#ff6600' };
+    return { text: 'Есть билеты', color: '#00ff00' };
+  };
+
+  return React.createElement('div', { 
+    style: { 
+      display: 'grid', 
+      gap: '2rem', 
+      maxWidth: '1000px', 
+      margin: '0 auto' 
+    } 
+  },
+    tours.map(tour => {
+      const status = getTicketStatus(tour.tickets, tour.maxTickets);
+      
+      return React.createElement('div', {
+        key: tour.id,
+        style: {
+          background: 'linear-gradient(135deg, rgba(255,0,0,0.1), rgba(0,0,0,0.8))',
+          border: '2px solid #f00',
+          borderRadius: '15px',
+          padding: '2rem',
+          position: 'relative',
+          overflow: 'hidden',
+          transition: 'all 0.3s ease'
+        }
+      },
+        // Статус билетов
+        React.createElement('div', {
+          style: {
+            position: 'absolute',
+            top: '15px',
+            right: '15px',
+            background: status.color,
+            color: 'white',
+            padding: '5px 10px',
+            borderRadius: '15px',
+            fontSize: '12px',
+            fontWeight: 'bold'
+          }
+        }, status.text),
+        
+        // Дата
+        React.createElement('div', {
+          style: {
+            fontSize: '2rem',
+            fontWeight: 'bold',
+            color: '#f00',
+            marginBottom: '1rem'
+          }
+        }, tour.date),
+        
+        // Город и место
+        React.createElement('h3', {
+          style: { color: 'white', marginBottom: '0.5rem' }
+        }, tour.city),
+        
+        React.createElement('p', {
+          style: { color: '#ccc', marginBottom: '1rem' }
+        }, `${tour.venue} • ${tour.time}`),
+        
+        // Прогресс-бар билетов
+        React.createElement('div', {
+          style: {
+            background: '#333',
+            borderRadius: '10px',
+            height: '8px',
+            marginBottom: '1rem',
+            overflow: 'hidden'
+          }
+        },
+          React.createElement('div', {
+            style: {
+              background: status.color,
+              height: '100%',
+              width: `${(tour.tickets / tour.maxTickets) * 100}%`,
+              transition: 'width 0.5s ease'
+            }
+          })
+        ),
+        
+        React.createElement('div', {
+          style: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }
+        },
+          React.createElement('div', null,
+            React.createElement('div', {
+              style: { fontSize: '1.5rem', fontWeight: 'bold', color: '#f00' }
+            }, `от ${tour.price} ₽`),
+            React.createElement('div', {
+              style: { fontSize: '14px', color: '#ccc' }
+            }, `Осталось: ${tour.tickets} из ${tour.maxTickets}`)
+          )
+        )
+      );
+    })
+  );
+}
+
+// 4. Живые карточки туров (с кнопками)
 function LiveTourCards() {
   const [tours] = useState([
     {
@@ -576,10 +716,13 @@ document.addEventListener('DOMContentLoaded', () => {
       ReactDOM.render(React.createElement(SmartContactForm), formContainer);
     }
     
-    // Живые карточки туров
+    // Карточки туров (с кнопками или без)
     const toursContainer = document.querySelector('.tours-container');
     if (toursContainer) {
-      ReactDOM.render(React.createElement(LiveTourCards), toursContainer);
+      // На странице туров - без кнопок, на остальных - с кнопками
+      const isTourPage = window.location.pathname.includes('tours.html');
+      const component = isTourPage ? InfoTourCards : LiveTourCards;
+      ReactDOM.render(React.createElement(component), toursContainer);
     }
   }, 100);
 });
