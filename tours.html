@@ -6,6 +6,11 @@
     <title>Световой год | Туры</title>
     <link rel="stylesheet" href="main.css">
     <script src="main.js" defer></script>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="react-components.js" defer></script>
 </head>
 <body>
     <header>
@@ -26,6 +31,7 @@
         <h1>Ближайшие концерты</h1>
         
         <div class="tours-container">
+            <!--
             <div class="tour-card">
                 <div class="tour-date">
                     <span class="day">15</span>
@@ -53,9 +59,9 @@
                     <p class="time">Начало: 19:30</p>
                     <p class="price">от 1800 ₽</p>
                 </div>
-                <button class="open-modal btn tour-btn">Купить билет</button>
-            </div>
-
+                <button class="open-modal btn tour-btn">Купить билет</button> 
+            </div>-->
+            <!--
             <div class="tour-card">
                 <div class="tour-date">
                     <span class="day">05</span>
@@ -70,6 +76,7 @@
                 </div>
                 <button class="open-modal btn tour-btn">Купить билет</button>
             </div>
+            -->
         </div>
     </main>
 
@@ -90,7 +97,7 @@
     <div class="modal" id="modal">
         <div class="modal-content">
             <span class="close">×</span>
-            <h2>Заказать билет</h2>
+            <h2>🎫 Заказ билета</h2>
             <form>
                 <input type="text" placeholder="Имя" required>
                 <input type="email" placeholder="Email" required>

@@ -5,36 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSlide = 0;
     let autoSlideInterval;
 
-    // 1. СЛАЙДЕР (на index.html)
-    const sliderContainer = document.getElementById('slider');
-    const sliderCounter = document.querySelector('.slider-counter');
-    if (sliderContainer) {
-        function showSlide(n) {
-            currentSlide = (n + slides.length) % slides.length;
-            sliderContainer.innerHTML = `<img src="assets/${slides[currentSlide]}" alt="Концерт ${currentSlide + 1}">`;
-            sliderCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
-        }
+    // 1. СЛАЙДЕР (на index.html) - отключен для React
 
-        function nextSlide() { showSlide(currentSlide + 1); }
-        function prevSlide() { showSlide(currentSlide - 1); }
-
-        // Клик по слайдеру
-        sliderContainer.addEventListener('click', (e) => {
-            const half = sliderContainer.offsetWidth / 2;
-            e.clientX < half ? prevSlide() : nextSlide();
-        });
-
-        // Автопрокрутка
-        function startAutoSlide() {
-            autoSlideInterval = setInterval(nextSlide, 3000);
-        }
-        sliderContainer.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
-        sliderContainer.addEventListener('mouseleave', startAutoSlide);
-        showSlide(0);
-        startAutoSlide();
-    }
-
-    // 2. МОДАЛКА (заказ билета)
+    // 2. МОДАЛКА (заказ билета) - НОВЫЙ КОД с поддержкой React кнопок
+    /*
+    // СТАРЫЙ КОД ЗАКОММЕНТИРОВАН
     const modal = document.getElementById('modal');
     const openModalBtns = document.querySelectorAll('.open-modal');
     const closeModal = document.querySelector('.close');
@@ -53,6 +28,37 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         window.onclick = (e) => { if (e.target === modal) closeModal.click(); };
     }
+    */
+    
+    // НОВЫЙ КОД - поддерживает динамические кнопки React
+    const modal = document.getElementById('modal');
+
+    if (modal) {
+        // Используем делегирование событий для динамических кнопок
+        document.addEventListener('click', (e) => {
+            // Открытие модалки при клике на кнопки с классом open-modal
+            if (e.target.classList.contains('open-modal') || e.target.closest('.open-modal')) {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                document.querySelector('main').style.filter = 'blur(5px)';
+            }
+            
+            // Закрытие модалки при клике на крестик
+            if (e.target.classList.contains('close')) {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+                document.querySelector('main').style.filter = '';
+            }
+            
+            // Закрытие по клику вне модалки
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+                document.querySelector('main').style.filter = '';
+            }
+        });
+    }
+
 
     // 3. БУРГЕР-МЕНЮ
     const burger = document.querySelector('.burger');
