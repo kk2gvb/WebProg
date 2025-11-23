@@ -1,8 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
+const { sendTicketEmail } = require('./email-service');
+//const { sendTicketSMS } = require('./sms-service');
 
 const app = express();
 const PORT = 3000;
@@ -148,8 +151,113 @@ app.get('/api/orders/:id', (req, res) => {
   );
 });
 
+// ADMIN API Routes
+
+// Получить все заказы для админ-панели
+app.get('/api/admin/orders', (req, res) => {
+  db.all(
+    `SELECT o.*, c.city, c.venue, c.date, c.price 
+     FROM orders o 
+     JOIN concerts c ON o.concert_id = c.id 
+     ORDER BY o.created_at DESC`,
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json(rows);
+    }
+  );
+});
+
+// Получить статистику для админ-панели
+app.get('/api/admin/stats', (req, res) => {
+  const stats = {};
+  
+  // Общее количество заказов
+  db.get("SELECT COUNT(*) as total FROM orders", (err, row) => {
+    if (err) return res.status(500).json({ error: err.message });
+    stats.totalOrders = row.total;
+    
+    // Заказы в ожидании
+    db.get("SELECT COUNT(*) as pending FROM orders WHERE status = 'pending'", (err, row) => {
+      if (err) return res.status(500).json({ error: err.message });
+      stats.pendingOrders = row.pending;
+      
+      // Подтвержденные заказы
+      db.get("SELECT COUNT(*) as confirmed FROM orders WHERE status = 'confirmed'", (err, row) => {
+        if (err) return res.status(500).json({ error: err.message });
+        stats.confirmedOrders = row.confirmed;
+        
+        // Общая выручка (только подтвержденные)
+        db.get(
+          `SELECT SUM(c.price) as revenue 
+           FROM orders o 
+           JOIN concerts c ON o.concert_id = c.id 
+           WHERE o.status = 'confirmed'`,
+          (err, row) => {
+            if (err) return res.status(500).json({ error: err.message });
+            stats.totalRevenue = row.revenue || 0;
+            res.json(stats);
+          }
+        );
+      });
+    });
+  });
+});
+
+// Обновить статус заказа
+app.put('/api/admin/orders/:id', (req, res) => {
+  const orderId = req.params.id;
+  const { status } = req.body;
+  
+  if (!['pending', 'confirmed', 'cancelled'].includes(status)) {
+    return res.status(400).json({ error: 'Неверный статус' });
+  }
+  
+  // Сначала получаем данные заказа для отправки email
+  db.get(
+    `SELECT o.*, c.city, c.venue, c.date, c.time, c.price 
+     FROM orders o 
+     JOIN concerts c ON o.concert_id = c.id 
+     WHERE o.id = ?`,
+    [orderId],
+    (err, orderData) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      
+      if (!orderData) {
+        return res.status(404).json({ error: 'Заказ не найден' });
+      }
+      
+      // Обновляем статус
+      db.run(
+        "UPDATE orders SET status = ? WHERE id = ?",
+        [status, orderId],
+        function(err) {
+          if (err) {
+            return res.status(500).json({ error: err.message });
+          }
+          
+          // Если заказ подтвержден - отправляем уведомления
+          if (status === 'confirmed') {
+            sendTicketEmail(orderData.email, orderData);
+            // Также отправляем SMS если есть API ключ
+            if (process.env.SMS_API_KEY) {
+              sendTicketSMS(orderData.phone, orderData);
+            }
+          }
+          
+          res.json({ success: true, message: 'Статус обновлен' });
+        }
+      );
+    }
+  );
+});
+
 // Запуск сервера
 app.listen(PORT, () => {
   console.log(`🎸 Сервер запущен на http://localhost:${PORT}`);
   console.log(`📊 API доступно на http://localhost:${PORT}/api/concerts`);
+  console.log(`🔐 Админ-панель: http://localhost:${PORT}/admin.html`);
 });

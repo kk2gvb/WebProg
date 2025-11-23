@@ -43,6 +43,14 @@ echo "📦 Обновляем зависимости..."
 npm install --production
 print_status "Зависимости обновлены"
 
+# 2.1. Копируем .env файл для email настроек
+if [ -f ".env" ]; then
+    cp .env ~/
+    print_status "Email настройки скопированы"
+else
+    print_warning "Файл .env не найден - email не будет работать"
+fi
+
 # 3. Исправляем URL в React компонентах для продакшена
 echo "🔧 Настраиваем API URL для продакшена..."
 sed -i "s|http://localhost:3000/api/|/api/|g" react-components.js
@@ -52,7 +60,14 @@ print_status "API URL настроен"
 echo "📂 Копируем файлы фронтенда..."
 sudo cp -f *.html "$WEB_DIR/"
 sudo cp -f *.css "$WEB_DIR/"
-sudo cp -f *.js "$WEB_DIR/"
+# Копируем только фронтенд JS файлы
+sudo cp -f main.js react-components.js admin-components.js "$WEB_DIR/"
+# server.js и email-service.js остаются в домашней директории
+
+# Копируем favicon если есть
+if [ -f "favicon.ico" ]; then
+    sudo cp -f favicon.ico "$WEB_DIR/"
+fi
 
 # Копируем папку assets если существует
 if [ -d "assets" ]; then
