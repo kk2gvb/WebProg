@@ -7,7 +7,7 @@ async function sendTicketEmail(email, orderData) {
   
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Световой год <onboarding@resend.dev>',
+      from: 'Световой год <tickets@rock.brewbug.su>',
       to: [email],
       subject: `🎸 Билет на концерт Световой год - Заказ #${orderData.id}`,
       html: `
