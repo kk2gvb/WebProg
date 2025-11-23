@@ -169,12 +169,37 @@ function SmartContactForm() {
 
     setIsSubmitting(true);
     
-    // Имитация отправки в базу данных
-    setTimeout(() => {
+    // Отправка на сервер
+    try {
+      const response = await fetch('http://localhost:3000/api/tickets', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          concert_id: parseInt(formData.concert),
+          full_name: formData.fullName,
+          email: formData.email,
+          phone: formData.phone
+        })
+      });
+      
+      const result = await response.json();
+      
+      if (response.ok) {
+        setIsSubmitting(false);
+        setIsSuccess(true);
+        setFormData({ concert: '', fullName: '', email: '', phone: '' });
+        console.log('Заказ создан:', result);
+      } else {
+        setIsSubmitting(false);
+        alert('Ошибка: ' + result.error);
+      }
+    } catch (error) {
       setIsSubmitting(false);
-      setIsSuccess(true);
-      setFormData({ concert: '', fullName: '', email: '', phone: '' });
-    }, 1500);
+      alert('Ошибка сети: ' + error.message);
+      console.error('Ошибка:', error);
+    }
   };
 
   if (isSuccess) {
@@ -357,38 +382,28 @@ function SmartContactForm() {
 
 // 3. Информационные карточки туров (без кнопок)
 function InfoTourCards() {
-  const [tours] = useState([
-    {
-      id: 1,
-      date: '15 МАР 2026',
-      city: 'Москва',
-      venue: 'Клуб "Космос"',
-      time: '20:00',
-      price: 1500,
-      tickets: 45,
-      maxTickets: 200
-    },
-    {
-      id: 2,
-      date: '22 МАР 2026',
-      city: 'Санкт-Петербург',
-      venue: 'Клуб "Орбита"',
-      time: '19:30',
-      price: 1800,
-      tickets: 12,
-      maxTickets: 150
-    },
-    {
-      id: 3,
-      date: '05 АПР 2026',
-      city: 'Екатеринбург',
-      venue: 'Дворец молодежи',
-      time: '20:00',
-      price: 1200,
-      tickets: 89,
-      maxTickets: 300
-    }
-  ]);
+  const [tours, setTours] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Загружаем данные с сервера
+  useEffect(() => {
+    fetch('http://localhost:3000/api/concerts')
+      .then(response => response.json())
+      .then(data => {
+        setTours(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Ошибка загрузки концертов:', error);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return React.createElement('div', {
+      style: { textAlign: 'center', color: '#f00', fontSize: '18px', padding: '2rem' }
+    }, '🎸 Загрузка концертов...');
+  }
 
   const getTicketStatus = (tickets, maxTickets) => {
     const percentage = (tickets / maxTickets) * 100;
@@ -406,7 +421,7 @@ function InfoTourCards() {
     } 
   },
     tours.map(tour => {
-      const status = getTicketStatus(tour.tickets, tour.maxTickets);
+      const status = getTicketStatus(tour.available_tickets, tour.max_tickets);
       
       return React.createElement('div', {
         key: tour.id,
@@ -468,7 +483,7 @@ function InfoTourCards() {
             style: {
               background: status.color,
               height: '100%',
-              width: `${(tour.tickets / tour.maxTickets) * 100}%`,
+              width: `${(tour.available_tickets / tour.max_tickets) * 100}%`,
               transition: 'width 0.5s ease'
             }
           })
@@ -487,7 +502,7 @@ function InfoTourCards() {
             }, `от ${tour.price} ₽`),
             React.createElement('div', {
               style: { fontSize: '14px', color: '#ccc' }
-            }, `Осталось: ${tour.tickets} из ${tour.maxTickets}`)
+            }, `Осталось: ${tour.available_tickets} из ${tour.max_tickets}`)
           )
         )
       );
