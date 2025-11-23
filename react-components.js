@@ -171,7 +171,8 @@ function SmartContactForm() {
     
     // Отправка на сервер
     try {
-      const response = await fetch('http://localhost:3000/api/tickets', {
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3000/api/tickets' : '/api/tickets';
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -191,6 +192,9 @@ function SmartContactForm() {
         setIsSuccess(true);
         setFormData({ concert: '', fullName: '', email: '', phone: '' });
         console.log('Заказ создан:', result);
+        
+        // Обновляем данные о концертах на странице туров
+        window.dispatchEvent(new CustomEvent('ticketOrdered'));
       } else {
         setIsSubmitting(false);
         alert('Ошибка: ' + result.error);
@@ -385,9 +389,10 @@ function InfoTourCards() {
   const [tours, setTours] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Загружаем данные с сервера
-  useEffect(() => {
-    fetch('http://localhost:3000/api/concerts')
+  // Функция загрузки данных
+  const loadConcerts = () => {
+    const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3000/api/concerts' : '/api/concerts';
+    fetch(apiUrl)
       .then(response => response.json())
       .then(data => {
         setTours(data);
@@ -397,6 +402,23 @@ function InfoTourCards() {
         console.error('Ошибка загрузки концертов:', error);
         setLoading(false);
       });
+  };
+
+  // Загружаем данные при монтировании
+  useEffect(() => {
+    loadConcerts();
+    
+    // Слушаем событие заказа билета
+    const handleTicketOrdered = () => {
+      console.log('Обновляем данные о концертах...');
+      loadConcerts();
+    };
+    
+    window.addEventListener('ticketOrdered', handleTicketOrdered);
+    
+    return () => {
+      window.removeEventListener('ticketOrdered', handleTicketOrdered);
+    };
   }, []);
 
   if (loading) {
