@@ -8,8 +8,8 @@ function AdvancedSlider() {
   const slides = [
     { img: 'concert1.jpg', title: 'Концерт в Москве' },
     { img: 'concert2.jpg', title: 'Фестиваль Rock' },
-    { img: 'concert1.jpg', title: 'Студийная запись' },
-    { img: 'concert2.jpg', title: 'Акустический сет' }
+    { img: 'concert1.jpg', title: 'Концерт в Санкт-Петербургере'},
+    { img: 'concert2.jpg', title: 'Акустический концерт' }
   ];
 
   useEffect(() => {
